@@ -1,35 +1,36 @@
 import React, { useEffect } from 'react';
-
-import './App.css';
-import Header from './features/counter/Header';
-import Sidebar from './features/counter/Sidebar';
-import Feed from './features/counter/Feed';
-import Widget from './features/counter/Widget';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectUser } from './features/userSlice';
-import { Login } from '@mui/icons-material';
-import { login } from './features/userSlice';
+import './App.css';
+import { login, logout, selectUser } from './features/userSlice';
+import Feed from './features/Feed';
+import { auth } from './firebase';// 
+import Login from './Login';
+import Header from './features/Header';
+import Sidebar from './features/Sidebar';
+import Widget from './features/Widget';
+// import { Login } from '@mui/icons-material';
 
-import { auth } from './features/counter/firebase';
+
 
 function App() {
   const user = useSelector(selectUser)
   const dispatch = useDispatch();
   useEffect(() => {
-    auth.onAuthStateChanged(userAuth => {
+    auth.onAuthStateChanged((userAuth) => {
       if (userAuth) {
         dispatch(login({
           email: userAuth.email,
           uid: userAuth.uid,
           displayName: userAuth.displayName,
           photoUrl: userAuth.photoURL,
-        }))
+        })
+        );
       }
       else {
         dispatch(logout());
       }
-    })
-  })
+    });
+  }, []);
   return (
     <div className="app">
       <Header />

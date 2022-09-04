@@ -23,8 +23,12 @@ function Widget() {
                 <InfoIcon />
             </div>
             {newsArticle("Latest React Features Are Here", "Top News -9090 readers")}
+            {newsArticle("Latest React Features Are Here", "Top News -9090 readers")}
+            {newsArticle("Latest React Features Are Here", "Top News -9090 readers")}
+            {newsArticle("Latest React Features Are Here", "Top News -9090 readers")}
+            {newsArticle("Latest React Features Are Here", "Top News -9090 readers")}
         </div>
-    )
+    );
 }
 
 export default Widget

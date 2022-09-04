@@ -6,27 +6,28 @@ import InputOptions from './InputOptions';
 import VideocamIcon from '@mui/icons-material/Videocam';
 import EventIcon from '@mui/icons-material/Event';
 import ArticleIcon from '@mui/icons-material/Article';
-
 import { useSelector } from 'react-redux';
 import Post from './Post';
-import { db } from './firebase';
+import { db } from '../firebase';
 import firebase from 'firebase';
-import { selectUser } from '../userSlice';
+import { selectUser } from './userSlice';
 
 function Feed() {
     const user = useSelector(selectUser);
     const [input, setInput] = useState('')
     const [posts, setPosts] = useState([])
     useEffect(() => {
-        db.collection("posts").onSnapshot((snapshot) =>
-            setPosts(snapshot.docs.map((doc) => (
-                {
-                    id: doc.id,
-                    data: doc.data(),
-                }
-            )))
-        )
-    }, [])
+        db.collection("posts")
+            .orderBy("timestamp", "desc")
+            .onSnapshot((snapshot) =>
+                setPosts(
+                    snapshot.docs.map((doc) => ({
+                        id: doc.id,
+                        data: doc.data(),
+                    }))
+                )
+            );
+    }, []);
     const sendPost = (e) => {
         e.preventDefault();
         db.collection('posts').add({
@@ -36,9 +37,10 @@ function Feed() {
             photoUrl: user.photoUrl || "",
             timestamp: firebase.firestore.FieldValue.serverTimestamp()
 
-        })
+        });
+        setInput("");
 
-    }
+    };
     return (
         <div className='feed'>
             <div className="feed_inputContainer">
